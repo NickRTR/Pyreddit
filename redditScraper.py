@@ -1,23 +1,26 @@
-from TTS import tts
+import os
+from dotenv import load_dotenv
 import praw
+from TTS import tts
 
-# TODO: env variable for secrets
- 
-reddit = praw.Reddit(client_id="sGiZv9kRIP8pqpJG1PQYmg",         # your client id
-                               client_secret="Gx-jdV5vhbjvIOi_ehR-Vf85aoHREQ",      # your client secret
-                               user_agent="Scraper")        # your user agent
+load_dotenv()
+
+clientId = os.getenv("clientId")
+clientSecret = os.getenv("clientSecret")
+userAgent = os.getenv("userAgent")
+
+reddit = praw.Reddit(client_id=clientId, client_secret=clientSecret, user_agent=userAgent)
 
 subreddit = reddit.subreddit("askreddit")
  
 def createAudioFiles():
     for post in subreddit.hot(limit=1):
         tts(post.title, "question")
-        # TODO: sort comments (hot)
+        print("Created Title audio file")
         submission = reddit.submission(post.id)
+        submission.comments.replace_more(limit = 0)
         for index, comment in enumerate(submission.comments):
-            if (index > 1):
+            if (index >= 3):
                 break
-            try:
-                tts(comment.body, f"comment-{index}")
-            except:
-                continue
+            tts(comment.body, f"comment-{index}")
+            print(f"Created audio file for comment {index + 1}")
