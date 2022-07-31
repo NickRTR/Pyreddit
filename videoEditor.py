@@ -18,7 +18,6 @@ def joinQuestionWithComments():
     questionClip = movie.AudioFileClip(questionAudio)
     return movie.concatenate_audioclips([questionClip, comments])
 
-
 def joinAudioWithVideo(audioClip):
     videoClip = movie.VideoFileClip(random.choice(backgroundVideos))
     # change resolution to 1080x1920
