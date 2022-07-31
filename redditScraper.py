@@ -20,6 +20,7 @@ def createAudioFiles():
         submission = reddit.submission(post.id)
         submission.comments.replace_more(limit = 0)
         for index, comment in enumerate(submission.comments):
+            # limit to 3 comments
             if (index >= 3):
                 break
             tts(comment.body, f"comment-{index}")
