@@ -2,6 +2,7 @@ import os
 from dotenv import load_dotenv
 import praw
 from TTS import tts
+from images import createImage
 
 load_dotenv()
 
@@ -23,6 +24,7 @@ def createAudioFiles():
     for post in subreddit.hot(limit=1):
         tts(post.title, "question")
         print("Created Title audio file")
+        createImage(post.title, "question")
         submission = reddit.submission(post.id)
         submission.comments.replace_more(limit = 0)
         for index, comment in enumerate(submission.comments):
@@ -30,4 +32,5 @@ def createAudioFiles():
             if (index >= 3):
                 break
             tts(comment.body, f"comment-{index}")
+            createImage(comment.body, f"comment-{index}")
             print(f"Created audio file for comment {index + 1}")

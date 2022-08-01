@@ -5,25 +5,36 @@ import glob
 import random
 
 audioComments = glob.glob("./audio/comment-*.mp3")
+commentImages = glob.glob("./images/comment-*.png")
 backgroundVideos = glob.glob("./background/video/*.mp4")
 backgroundMusic = glob.glob("./background/music/*.mp3")
 
 questionAudio = f"./audio/question.mp3"
 outputVideo = f"./output/output.mp4"
 
-def joinQuestionWithComments():
-    # join all comments
-    commentClips = [movie.AudioFileClip(c) for c in audioComments]
-    comments = movie.concatenate_audioclips(commentClips)
+def createAudioWithImages():
+    comments = []
+    for index, audioComment in enumerate(audioComments):
+        commentClip = movie.AudioFileClip(audioComment)
+        imageClip = movie.ImageClip(commentImages[index])
+        videoClip = imageClip.set_audio(commentClip)
+        videoClip.duration = commentClip.duration
+        comments.append(videoClip)
+
+    # join all comments together
+    commentsClip = movie.concatenate_videoclips(comments)
+
+    questionClip = movie.AudioFileClip(questionAudio)
+    imageClip = movie.ImageClip("./images/question.png")
+    question = imageClip.set_audio(questionClip)
+    question.duration = questionClip.duration
 
     # join question with comments
-    questionClip = movie.AudioFileClip(questionAudio)
-    return movie.concatenate_audioclips([questionClip, comments])
+    return movie.concatenate_videoclips([question, commentsClip])
 
-def joinAudioWithVideo(audioClip):
-    videoClip = movie.VideoFileClip(random.choice(backgroundVideos))
-    # change resolution to 1080x1920
-    return videoClip.set_audio(audioClip)
+def addBackgroundVideo(videoClip):
+    backgroundClip = movie.VideoFileClip(random.choice(backgroundVideos))
+    return movie.CompositeVideoClip([backgroundClip, videoClip])
 
 def addBackgroundMusic(videoClip):
     music = movie.AudioFileClip(random.choice(backgroundMusic))
@@ -37,24 +48,15 @@ def editVideo(finalVideo, audioDuration):
     # loop background video to fit audio length
     editedVideo = video.fx.all.loop(finalVideo, duration=audioDuration)
     # fade in
-    editedVideo = video.fx.all.fadein(editedVideo, 0.1)
+    editedVideo = video.fx.all.fadein(editedVideo, .1)
     # fade out
-    editedVideo = video.fx.all.fadeout(editedVideo, .1)
-
-    # # add text
-    # textClip = movie.TextClip("Test", fontsize = 75, color = 'black') 
-        
-    # # setting position of text in the center and duration will be 10 seconds 
-    # textClip= textClip.set_pos('center').set_duration(10) 
-        
-    # # Overlay the text clip on the first video clip 
-    # editedVideo = movie.CompositeVideoClip([editedVideo, textClip]) 
+    editedVideo = video.fx.all.fadeout(editedVideo, .2)
 
     return editedVideo
 
 def createVideo():
-    audio = joinQuestionWithComments()
-    finalVideo = joinAudioWithVideo(audio)
-    finalVideo = addBackgroundMusic(finalVideo)
-    finalVideo = editVideo(finalVideo, audio.duration)
-    finalVideo.write_videofile(outputVideo, fps=30)
+    rawVideo = createAudioWithImages()
+    video = addBackgroundVideo(rawVideo)
+    video = addBackgroundMusic(video)
+    video = editVideo(video, rawVideo.duration)
+    video.write_videofile(outputVideo, fps=30)
