@@ -18,8 +18,14 @@ def removeOldAudio():
     filelist = [ f for f in os.listdir("./audio") if f.endswith(".mp3") ]
     for f in filelist:
         os.remove(os.path.join("./audio", f))
+
+def removeOldImages():
+    filelist = [ f for f in os.listdir("./images") if f.endswith(".png") ]
+    for f in filelist:
+        os.remove(os.path.join("./images", f))
  
 def createAudioFiles():
+    removeOldImages()
     removeOldAudio()
     for post in subreddit.hot(limit=1):
         tts(post.title, "question")
