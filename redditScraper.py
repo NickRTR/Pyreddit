@@ -12,9 +12,14 @@ userAgent = os.getenv("userAgent")
 reddit = praw.Reddit(client_id=clientId, client_secret=clientSecret, user_agent=userAgent)
 
 subreddit = reddit.subreddit("askreddit")
+
+def removeOldAudio():
+    filelist = [ f for f in os.listdir("./audio") if f.endswith(".mp3") ]
+    for f in filelist:
+        os.remove(os.path.join("./audio", f))
  
 def createAudioFiles():
-    # TODO: remove old audio files
+    removeOldAudio()
     for post in subreddit.hot(limit=1):
         tts(post.title, "question")
         print("Created Title audio file")
