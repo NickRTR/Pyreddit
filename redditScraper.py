@@ -2,7 +2,7 @@ import os
 from dotenv import load_dotenv
 import praw
 from TTS import tts
-from images import createImage
+from postImage import createImage
 from videoEditor import createVideo
 
 load_dotenv()
