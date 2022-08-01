@@ -3,7 +3,7 @@ from PIL import Image, ImageDraw, ImageFont
  
 def createImage(text, name):
     font = ImageFont.truetype("./fonts/Noto_Sans/NotoSans-Medium.ttf", 24)
-    img = Image.new('RGB', (500, 350), color = (255, 255, 255))
+    img = Image.new('RGB', (500, 300), color = (255, 255, 255))
     d = ImageDraw.Draw(img)
 
     margin = offset = 20

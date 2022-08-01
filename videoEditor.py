@@ -10,7 +10,6 @@ backgroundVideos = glob.glob("./background/video/*.mp4")
 backgroundMusic = glob.glob("./background/music/*.mp3")
 
 questionAudio = f"./audio/question.mp3"
-outputVideo = f"./output/output.mp4"
 
 def createAudioWithImages():
     comments = []
@@ -38,7 +37,7 @@ def addBackgroundVideo(videoClip):
 
 def addBackgroundMusic(videoClip):
     music = movie.AudioFileClip(random.choice(backgroundMusic))
-    music = audio.fx.all.volumex(music, 0.5)
+    music = audio.fx.all.volumex(music, 0.3)
     joinedAudio = movie.CompositeAudioClip([videoClip.audio, music])
     videoClip.audio = joinedAudio
     return videoClip
@@ -54,9 +53,9 @@ def editVideo(finalVideo, audioDuration):
 
     return editedVideo
 
-def createVideo():
+def createVideo(number):
     rawVideo = createAudioWithImages()
     video = addBackgroundVideo(rawVideo)
     video = addBackgroundMusic(video)
     video = editVideo(video, rawVideo.duration)
-    video.write_videofile(outputVideo, fps=30)
+    video.write_videofile(f"./output/output-{number}.mp4", fps=30)

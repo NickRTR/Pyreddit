@@ -3,6 +3,7 @@ from dotenv import load_dotenv
 import praw
 from TTS import tts
 from images import createImage
+from videoEditor import createVideo
 
 load_dotenv()
 
@@ -24,19 +25,28 @@ def removeOldImages():
     for f in filelist:
         os.remove(os.path.join("./images", f))
  
-def createAudioFiles():
+def createAudioFiles(limit):
     removeOldImages()
     removeOldAudio()
-    for post in subreddit.hot(limit=1):
+    run = 1
+    for post in subreddit.hot(limit=limit):
         tts(post.title, "question")
         print("Created Title audio file")
         createImage(post.title, "question")
         submission = reddit.submission(post.id)
         submission.comments.replace_more(limit = 0)
-        for index, comment in enumerate(submission.comments):
+        index = 0
+        for comment in submission.comments:
+            # limit character count
+            if (len(comment.body) > 300):
+                continue
             # limit to 3 comments
-            if (index >= 3):
+            if (index >= 5):
                 break
             tts(comment.body, f"comment-{index}")
             createImage(comment.body, f"comment-{index}")
             print(f"Created audio file for comment {index + 1}")
+            index += 1
+
+        createVideo(run)
+        run += 1
