@@ -14,6 +14,7 @@ reddit = praw.Reddit(client_id=clientId, client_secret=clientSecret, user_agent=
 subreddit = reddit.subreddit("askreddit")
  
 def createAudioFiles():
+    # TODO: remove old audio files
     for post in subreddit.hot(limit=1):
         tts(post.title, "question")
         print("Created Title audio file")
