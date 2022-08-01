@@ -53,9 +53,9 @@ def editVideo(finalVideo, audioDuration):
 
     return editedVideo
 
-def createVideo(number):
+def createVideo(videoNumber):
     rawVideo = createAudioWithImages()
     video = addBackgroundVideo(rawVideo)
     video = addBackgroundMusic(video)
     video = editVideo(video, rawVideo.duration)
-    video.write_videofile(f"./output/output-{number}.mp4", fps=30)
+    video.write_videofile(f"./output/output-{videoNumber}.mp4", fps=30)

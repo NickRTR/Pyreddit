@@ -1,3 +1,3 @@
-from redditScraper import createAudioFiles
+from redditScraper import getContent
 
-createAudioFiles(1)
+getContent(1)

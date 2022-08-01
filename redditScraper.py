@@ -25,7 +25,7 @@ def removeOldImages():
     for f in filelist:
         os.remove(os.path.join("./images", f))
  
-def createAudioFiles(limit):
+def getContent(limit):
     removeOldImages()
     removeOldAudio()
     run = 1
