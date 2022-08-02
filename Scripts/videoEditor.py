@@ -7,7 +7,6 @@ import random
 backgroundVideos = glob.glob("../assets/background/video/*.mp4")
 backgroundMusic = glob.glob("../assets/background/music/*.mp3")
 
-
 def createAudioWithImages():
     questionAudio = f"../assets/audio/question.mp3"
     audioComments = glob.glob("../assets/audio/comment-*.mp3")
@@ -17,7 +16,7 @@ def createAudioWithImages():
         commentClip = movie.AudioFileClip(audioComment)
         imageClip = movie.ImageClip(f"../assets/images/comment-{index}.png")
         videoClip = imageClip.set_audio(commentClip)
-        videoClip.duration = commentClip.duration
+        videoClip = videoClip.set_duration(commentClip.duration)
         comments.append(videoClip)
 
     # join all comments together
@@ -26,7 +25,7 @@ def createAudioWithImages():
     questionClip = movie.AudioFileClip(questionAudio)
     imageClip = movie.ImageClip("../assets/images/question.png")
     question = imageClip.set_audio(questionClip)
-    question.duration = questionClip.duration
+    question = question.set_duration(questionClip.duration)
 
     # join question with comments
     return movie.concatenate_videoclips([question, commentsClip])
