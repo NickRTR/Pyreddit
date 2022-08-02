@@ -32,7 +32,9 @@ def createAudioWithImages():
     return movie.concatenate_videoclips([question, commentsClip])
 
 def addBackgroundVideo(videoClip):
+    # loop background video to fit audio length
     backgroundClip = movie.VideoFileClip(random.choice(backgroundVideos))
+    backgroundClip = video.fx.all.loop(backgroundClip, videoClip.duration)
     return movie.CompositeVideoClip([backgroundClip, videoClip.set_position("center").set_opacity(0.85)])
 
 def addBackgroundMusic(videoClip):
@@ -42,10 +44,9 @@ def addBackgroundMusic(videoClip):
     videoClip.audio = joinedAudio
     return videoClip
 
-def editVideo(finalVideo, audioDuration):
+def editVideo(finalVideo, duration):
     editedVideo = finalVideo.resize((1080, 1920))
-    # loop background video to fit audio length
-    editedVideo = video.fx.all.loop(finalVideo, duration=audioDuration)
+    editedVideo = editedVideo.set_duration(duration)
     # fade in
     editedVideo = video.fx.all.fadein(editedVideo, .1)
     # fade out
