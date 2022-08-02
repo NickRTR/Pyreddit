@@ -47,8 +47,6 @@ def addBackgroundMusic(videoClip):
 def editVideo(finalVideo, duration):
     editedVideo = finalVideo.resize((1080, 1920))
     editedVideo = editedVideo.set_duration(duration)
-    # fade in
-    editedVideo = video.fx.all.fadein(editedVideo, .1)
     # fade out
     editedVideo = video.fx.all.fadeout(editedVideo, .2)
 
