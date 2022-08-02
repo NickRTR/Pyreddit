@@ -19,12 +19,10 @@ def createImages(assignments):
             page.goto(assignment["url"], timeout=0)
             page.set_viewport_size(ViewportSize(width=1920, height=1080))
 
+            # remove NSFW warning
             if page.locator('[data-testid="content-gate"]').is_visible():
-                # This means the post is NSFW and requires to click the proceed button.
                 page.locator('[data-testid="content-gate"] button').click()
-                page.locator(
-                    '[data-click-id="text"] button'
-                ).click()  # Remove "Click to see nsfw" Button in Screenshot
+                page.locator('[data-click-id="text"] button').click()  # Remove "Click to see nsfw" Button in Screenshot
 
             # if assignment is a comment, select comment instead of post / question
             if (assignment["title"] == "question"):
