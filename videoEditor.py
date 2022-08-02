@@ -4,18 +4,18 @@ import moviepy.audio as audio
 import glob
 import random
 
-audioComments = glob.glob("./audio/comment-*.mp3")
-commentImages = glob.glob("./images/comment-*.png")
 backgroundVideos = glob.glob("./background/video/*.mp4")
 backgroundMusic = glob.glob("./background/music/*.mp3")
 
-questionAudio = f"./audio/question.mp3"
 
 def createAudioWithImages():
+    questionAudio = f"./audio/question.mp3"
+    audioComments = glob.glob("./audio/comment-*.mp3")
     comments = []
+
     for index, audioComment in enumerate(audioComments):
         commentClip = movie.AudioFileClip(audioComment)
-        imageClip = movie.ImageClip(commentImages[index])
+        imageClip = movie.ImageClip(f"./images/comment-{index}.png")
         videoClip = imageClip.set_audio(commentClip)
         videoClip.duration = commentClip.duration
         comments.append(videoClip)

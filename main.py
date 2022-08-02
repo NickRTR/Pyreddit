@@ -1,3 +1,9 @@
+from helper import deleteTemporaryFiles, deleteFiles
 from redditScraper import getContent
 
-getContent(1)
+print("delete previous output videos")
+deleteFiles("./output")
+
+getContent(5)
+
+deleteTemporaryFiles()

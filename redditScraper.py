@@ -1,9 +1,9 @@
 import os
 from dotenv import load_dotenv
 import praw
-from requests import delete
+from helper import deleteTemporaryFiles
 from TTS import tts
-from postImage import createImages
+from imageCreator import createImages
 from videoEditor import createVideo
 
 load_dotenv()
@@ -15,23 +15,16 @@ userAgent = os.getenv("userAgent")
 reddit = praw.Reddit(client_id=clientId, client_secret=clientSecret, user_agent=userAgent)
 
 subreddit = reddit.subreddit("askreddit")
-
-def deleteFiles(directory):
-    filelist = [ f for f in os.listdir(directory) ]
-    for f in filelist:
-        os.remove(os.path.join(directory, f))
  
 def getContent(limit):
-    imageList = []
-
-    deleteFiles("./images")
-    deleteFiles("./audio")
-    deleteFiles("./output")
-
     run = 1
-    totalDuration = 0
 
     for post in subreddit.hot(limit=limit):
+        imageList = []
+        totalDuration = 0
+
+        deleteTemporaryFiles()
+
         totalDuration += tts(post.title, "question")
         print("Created Title audio file")
 
@@ -54,8 +47,8 @@ def getContent(limit):
             imageList.append({"url": f"https://www.reddit.com{comment.permalink}", "title": f"comment-{index}", "commentId": comment.id})
             print(f"Created audio file for comment {index + 1}")
             index += 1
-
         createImages(imageList)
 
         createVideo(run)
+        
         run += 1
