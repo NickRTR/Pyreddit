@@ -50,5 +50,7 @@ def getContent(limit):
         createImages(imageList)
 
         createVideo(run)
+
+        print(f"Title: {post.title}")
         
         run += 1
