@@ -1,6 +1,7 @@
 import os
 from dotenv import load_dotenv
 import praw
+from requests import delete
 from TTS import tts
 from postImage import createImages
 from videoEditor import createVideo
@@ -15,28 +16,23 @@ reddit = praw.Reddit(client_id=clientId, client_secret=clientSecret, user_agent=
 
 subreddit = reddit.subreddit("askreddit")
 
-def removeOldAudio():
-    filelist = [ f for f in os.listdir("./audio") if f.endswith(".mp3") ]
+def deleteFiles(directory):
+    filelist = [ f for f in os.listdir(directory) ]
     for f in filelist:
-        os.remove(os.path.join("./audio", f))
-
-def removeOldImages():
-    filelist = [ f for f in os.listdir("./images") if f.endswith(".png") ]
-    for f in filelist:
-        os.remove(os.path.join("./images", f))
-
-def getAvatar(user):
-    redditor = reddit.redditor(user)
-    return redditor.icon_img
+        os.remove(os.path.join(directory, f))
  
 def getContent(limit):
     imageList = []
 
-    removeOldImages()
-    removeOldAudio()
+    deleteFiles("./images")
+    deleteFiles("./audio")
+    deleteFiles("./output")
+
     run = 1
+    totalDuration = 0
+
     for post in subreddit.hot(limit=limit):
-        tts(post.title, "question")
+        totalDuration += tts(post.title, "question")
         print("Created Title audio file")
 
         imageList.append({"url": post.url, "title": "question"})
@@ -47,12 +43,14 @@ def getContent(limit):
   
         for comment in submission.comments:
             # limit character count
-            if (len(comment.body) > 300):
+            if (len(comment.body) > 600):
                 continue
-            # limit to 3 comments
-            if (index >= 5):
+            totalDuration += tts(comment.body, f"comment-{index}")
+            # limit video to 60 s
+            if (totalDuration > 60):
+                # delete last tts
+                os.remove(f"./audio/comment-{index}.mp3")
                 break
-            tts(comment.body, f"comment-{index}")
             imageList.append({"url": f"https://www.reddit.com{comment.permalink}", "title": f"comment-{index}", "commentId": comment.id})
             print(f"Created audio file for comment {index + 1}")
             index += 1
