@@ -24,7 +24,7 @@ def createImages(assignments):
                 # remove NSFW warning
                 if page.locator('[data-testid="content-gate"]').is_visible():
                     page.locator('[data-testid="content-gate"] button').click()
-                    page.locator('[data-click-id="text"] button').click()
+                    page.locator('button:has-text("CLICK TO SEE NSFW")').click()
                 page.locator('[data-test-id="post-content"]').screenshot(path=f"../assets/images/{assignment['title']}.png")
             else:
                 page.locator(f'#t1_{assignment["commentId"]}').screenshot(path=f"../assets/images/{assignment['title']}.png")

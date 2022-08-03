@@ -4,6 +4,6 @@ from redditScraper import getContent
 print("delete previous output videos")
 deleteFiles("../output")
 
-getContent(2)
+getContent(1)
 
 deleteTemporaryFiles()

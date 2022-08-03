@@ -27,6 +27,7 @@ def createAudioWithImages():
     return movie.concatenate_videoclips([questionVideo, commentsClip])
 
 def addBackgroundVideo(videoClip):
+    print("adding background video")
     # loop background video to fit audio length
     backgroundClip = movie.VideoFileClip(random.choice(backgroundVideos))
     # adapt duration to audio (by looping or cutting)
@@ -34,6 +35,7 @@ def addBackgroundVideo(videoClip):
     return movie.CompositeVideoClip([backgroundClip, videoClip.set_position("center").set_opacity(0.85)])
 
 def addBackgroundMusic(videoClip, duration):
+    print("adding background music")
     music = movie.AudioFileClip(random.choice(backgroundMusic))
     # adapt duration to video (by looping or cutting)
     music = video.fx.all.loop(music, None, duration)
