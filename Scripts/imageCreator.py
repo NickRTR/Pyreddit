@@ -9,8 +9,8 @@ def createImages(assignments):
         browser = p.chromium.launch()
         context = browser.new_context(locale="en")
 
-        # cookie_file = open("../assets/cookies/cookie-dark-mode.json", encoding="utf-8") # dark mode
-        cookie_file = open("../assets/cookies/cookie-light-mode.json", encoding="utf-8") # light mode
+        cookie_file = open("../assets/cookies/cookie-dark-mode.json", encoding="utf-8") # dark mode
+        # cookie_file = open("../assets/cookies/cookie-light-mode.json", encoding="utf-8") # light mode
         cookies = json.load(cookie_file)
         context.add_cookies(cookies)  # load preference cookies
         page = context.new_page()

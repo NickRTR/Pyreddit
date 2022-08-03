@@ -32,7 +32,7 @@ def addBackgroundVideo(videoClip):
     backgroundClip = movie.VideoFileClip(random.choice(backgroundVideos))
     # adapt duration to audio (by looping or cutting)
     backgroundClip = video.fx.all.loop(backgroundClip, None, videoClip.duration)
-    return movie.CompositeVideoClip([backgroundClip, videoClip.set_position("center").set_opacity(0.85)])
+    return movie.CompositeVideoClip([backgroundClip, videoClip.set_position("center").set_opacity(0.9)])
 
 def addBackgroundMusic(videoClip, duration):
     print("adding background music")
