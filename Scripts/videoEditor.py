@@ -28,17 +28,18 @@ def createAudioWithImages():
 
 def addBackgroundVideo(videoClip):
     print("adding background video")
-    # loop background video to fit audio length
-    backgroundClip = movie.VideoFileClip(random.choice(backgroundVideos))
+    # select random background video
+    backgroundClip = movie.VideoFileClip(random.choice(backgroundVideos)).without_audio()
     # adapt duration to audio (by looping or cutting)
-    backgroundClip = video.fx.all.loop(backgroundClip, None, videoClip.duration)
+    backgroundClip = video.fx.all.loop(backgroundClip, duration=videoClip.duration)
     return movie.CompositeVideoClip([backgroundClip, videoClip.set_position("center").set_opacity(0.9)])
 
 def addBackgroundMusic(videoClip, duration):
     print("adding background music")
+    # select random background music
     music = movie.AudioFileClip(random.choice(backgroundMusic))
     # adapt duration to video (by looping or cutting)
-    music = video.fx.all.loop(music, None, duration)
+    music = audio.fx.all.audio_loop(music, duration=duration)
     music = audio.fx.all.volumex(music, 0.2)
     joinedAudio = movie.CompositeAudioClip([videoClip.audio, music])
     videoClip.audio = joinedAudio
