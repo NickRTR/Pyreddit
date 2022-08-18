@@ -5,6 +5,7 @@ from helper import deleteTemporaryFiles
 from TTS import tts
 from imageCreator import createImages
 from videoEditor import createVideo
+import pyperclip
 
 load_dotenv()
 
@@ -41,7 +42,7 @@ def getContent(limit):
             totalDuration += tts(comment.body, f"comment-{index}")
             # limit video to 60 s
             if (totalDuration > 60):
-                # delete last tts
+                # delete last tts audio file
                 os.remove(f"../assets/audio/comment-{index}.mp3")
                 break
             imageList.append({"url": f"https://www.reddit.com{comment.permalink}", "title": f"comment-{index}", "commentId": comment.id})
@@ -51,6 +52,7 @@ def getContent(limit):
 
         createVideo(run)
 
-        print(f"Title: {post.title}")
-        
+        pyperclip.copy(post.title)
+        print(f"Copied Title: {post.title}")
+
         run += 1
