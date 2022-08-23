@@ -52,7 +52,13 @@ def getContent(limit):
 
         createVideo(run)
 
-        pyperclip.copy(post.title)
+        # open output folder
+        os.system("xdg-open ../output")
+
+        try:
+            pyperclip.copy(post.title)
+        except:
+            print("Copying title not possible on this system.")
         print(f"Copied Title: {post.title}")
 
         run += 1
